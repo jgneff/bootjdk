@@ -18,8 +18,20 @@ name: bootjdk
 title: BootJDK
 summary: Boot Java Development Kit
 description: |
-  This package contains the Boot JDK, the JDK to build the JDK. For
-  more information, see the README file for this project on GitHub:
+  This package contains the JDK used to build the JDK, called the Boot
+  JDK. It provides OpenJDK versions 12, 13, and 14 on its candidate,
+  beta, and edge channels. Its sole purpose is to bootstrap the
+  build of OpenJDK 15 from trusted sources for the initial release
+  of the OpenJDK Snap package. Note that OpenJDK versions 12, 13,
+  and 14 are no longer maintained by Oracle or any other Java vendor.
+
+  Do not install this package unless you have a historical interest in
+  these old releases. Instead of this package, consider installing the
+  currently maintained JDK release in the OpenJDK Snap package below:
+
+  https://snapcraft.io/openjdk
+
+  For more information, see the README file for this project on GitHub:
 
   https://github.com/jgneff/bootjdk
 
@@ -155,3 +167,8 @@ parts:
       find * -type f -exec test -f "$base/{}" \; -delete
       find * -type l -exec test -L "$base/{}" \; -delete
       find * -type d -empty -exec test -d "$base/{}" \; -delete
+
+layout:
+  # Fontconfig error: Cannot load config file from /etc/fonts/fonts.conf
+  /etc/fonts:
+    bind: $SNAP/etc/fonts
