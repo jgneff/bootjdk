@@ -7,11 +7,11 @@ This project builds Snap packages of OpenJDK 12, 13, and 14, so that I can build
 ```
 Ubuntu 18.04 LTS with GLIBC 2.27 (core18 base)
 Ubuntu OpenJDK 11 (openjdk-11-jdk-headless)
-↳ Snap OpenJDK 12 (bootjdk/latest/candidate)
-    ↳ Snap OpenJDK 13 (bootjdk/latest/beta)
-        ↳ Snap OpenJDK 14 (bootjdk/latest/edge)
-            ↳ Snap OpenJDK 15 (openjdk/latest/candidate → stable)
-                ↳ Snap OpenJDK 16 (openjdk/latest/beta)
+    ↳ Snap OpenJDK 12 (bootjdk/latest/candidate)
+        ↳ Snap OpenJDK 13 (bootjdk/latest/beta)
+            ↳ Snap OpenJDK 14 (bootjdk/latest/edge)
+                ↳ Snap OpenJDK 15 (openjdk/latest/candidate → stable)
+                    ↳ Snap OpenJDK 16 (openjdk/latest/beta)
                     ↳ Snap OpenJDK 17 (openjdk/latest/edge)
 ```
 
