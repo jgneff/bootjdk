@@ -43,7 +43,7 @@ version: '12.0.2+10'
 license: (GPL-2.0 WITH Classpath-exception-2.0)
 
 base: core18
-grade: devel
+grade: stable
 confinement: strict
 
 architectures:
