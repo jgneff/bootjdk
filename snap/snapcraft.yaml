@@ -16,19 +16,19 @@
 
 name: bootjdk
 title: BootJDK
-summary: Boot Java Development Kit
+summary: Boot JDK for building OpenJDK Snap package
 description: |
-  This package is obsolete. The following Snap package has the latest
-  General-Availability Release and Early-Access Builds of OpenJDK:
+  This package is obsolete. Install the package below for the current
+  general-availability release and early-access builds of OpenJDK:
 
   https://snapcraft.io/openjdk
 
   This package provides OpenJDK 12, 13, and 14 on its candidate,
   beta, and edge channels. Its sole purpose was to provide a chain
-  of trusted builds from OpenJDK 11 in Ubuntu 18.04 LTS through to
-  OpenJDK 15 in the initial release of the OpenJDK Snap package. Note
-  that the OpenJDK releases in this package are no longer maintained
-  by Oracle or any other Java vendor.
+  of trusted builds starting from OpenJDK 11 in Ubuntu 18.04 LTS
+  through to OpenJDK 15 in the initial release of the OpenJDK Snap
+  package. The older OpenJDK releases in this package are no longer
+  maintained by Oracle or any other Java vendor.
 
   For more information, see the README file for this project on GitHub:
 
