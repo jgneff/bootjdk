@@ -1,5 +1,5 @@
 # snapcraft.yaml - builds a Snap package of BootJDK
-# Copyright (C) 2021 John Neffenger
+# Copyright (C) 2021-2022 John Neffenger
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ description: |
   Java and OpenJDK are trademarks or registered trademarks of Oracle
   and/or its affiliates.
 
-version: '13.0.13+1'
+adopt-info: jdk
 license: GPL-2.0-with-classpath-exception
 
 base: core18
@@ -103,16 +103,19 @@ parts:
   bin:
     plugin: dump
     source: .
+    source-type: local
     stage: [bin]
 
   jdk:
     plugin: autotools
     source: https://github.com/openjdk/jdk13u.git
+    source-type: git
     source-tag: jdk-$SNAPCRAFT_PROJECT_VERSION
     source-depth: 1
     build-snaps:
     - bootjdk/latest/candidate
     build-packages:
+    - curl
     - libasound2-dev
     - libcups2-dev
     - libfontconfig1-dev
@@ -125,18 +128,63 @@ parts:
     - libxtst-dev
     - unzip
     - zip
+    override-pull: |
+      giturl=https://github.com/openjdk/jdk13u.git
+      tagurl=https://github.com/openjdk/jdk13u/tags.atom
+      release=13
+
+      # Gets the JDK version from the latest release tag on GitHub
+      #   $1 = JDK feature-release counter (formerly "major")
+      #   $2 = GitHub tag feed URL
+      getversion() {
+          local feature=$1
+          local feedurl=$2
+          curl -s "$feedurl" | grep "<title>jdk-${feature}[.0-9]*+" \
+              | sed -E -e '1!d' -e 's| *<title>jdk-(.*)</title>|\1|'
+      }
+
+      # Sets the version and saves its environment variable
+      #   $1 = the version string
+      setversion() {
+          snapcraftctl set-version "$1"
+          printf "export SNAPCRAFT_PROJECT_VERSION=%s\n" "$1" \
+              > /tmp/snapcraft-project-version
+      }
+
+      # See https://forum.snapcraft.io/t/17597
+      if [ -z "$SNAPCRAFT_PROJECT_VERSION" ]; then
+          version=$(getversion $release $tagurl)
+          setversion "$version"
+          git clone --branch "jdk-$version" --depth 1 \
+              $giturl "$SNAPCRAFT_PART_SRC"
+      else
+          snapcraftctl pull
+      fi
     build-environment:
     - JAVA_HOME: /snap/bootjdk/current/jdk
-    # Option '--disable-warnings-as-errors' for armhf
     override-build: |
+      # Loads the version environment variable if not defined
+      if [ -z "$SNAPCRAFT_PROJECT_VERSION" ]; then
+          . /tmp/snapcraft-project-version
+      fi
+
+      # Builds the JDK ('--enable-warnings-as-errors=no' for armhf)
       bash configure \
           --enable-warnings-as-errors=no \
           --enable-javac-server=no \
+          --with-vendor-name="Snap Build" \
+          --with-vendor-url="https://snapcraft.io/bootjdk" \
+          --with-vendor-bug-url="https://github.com/jgneff/bootjdk/discussions" \
           --with-version-pre=no \
           --with-version-opt=snap \
           --with-version-build="${SNAPCRAFT_PROJECT_VERSION#*+}" \
+          --with-extra-cflags="$CFLAGS" \
+          --with-extra-cxxflags="$CXXFLAGS" \
+          --with-extra-ldflags="$LDFLAGS" \
           --with-native-debug-symbols=none
       make images docs
+
+      # Installs the build output
       cd build/linux-*-server-release/images || exit
       mv jdk docs "$SNAPCRAFT_PART_INSTALL"
     organize:
