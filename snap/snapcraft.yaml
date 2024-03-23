@@ -46,10 +46,10 @@ architectures:
 - build-on: s390x
 
 slots:
-  jdk-17-1804:
+  jdk-18-1804:
     interface: content
     read: [$SNAP/jdk]
-  jdk-18-1804:
+  jdk-19-1804:
     interface: content
     read: [$SNAP/jdk]
 
@@ -105,13 +105,14 @@ parts:
 
   jdk:
     plugin: autotools
-    source: https://github.com/openjdk/jdk18u.git
+    source: https://github.com/openjdk/jdk19u.git
     source-type: git
     source-tag: jdk-$SNAPCRAFT_PROJECT_VERSION
     source-depth: 1
+    build-snaps:
+    - bootjdk/latest/stable
     build-packages:
     - curl
-    - openjdk-17-jdk-headless
     - libasound2-dev
     - libcups2-dev
     - libfontconfig1-dev
@@ -125,9 +126,9 @@ parts:
     - unzip
     - zip
     override-pull: |
-      release=18
-      giturl=https://github.com/openjdk/jdk18u.git
-      tagurl=https://github.com/openjdk/jdk18u/tags.atom
+      release=19
+      giturl=https://github.com/openjdk/jdk19u.git
+      tagurl=https://github.com/openjdk/jdk19u/tags.atom
 
       # Gets the version from the latest release tag on GitHub
       #   $1 = feature release number (formerly "major" version)
@@ -157,7 +158,7 @@ parts:
           snapcraftctl pull
       fi
     build-environment:
-    - JAVA_HOME: /usr/lib/jvm/java-17-openjdk-$SNAPCRAFT_TARGET_ARCH
+    - JAVA_HOME: /snap/bootjdk/current/jdk
     override-build: |
       # Loads the version environment variable if not defined
       if [ -z "$SNAPCRAFT_PROJECT_VERSION" ]; then
