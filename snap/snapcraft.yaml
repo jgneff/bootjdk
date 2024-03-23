@@ -46,10 +46,10 @@ architectures:
 - build-on: s390x
 
 slots:
-  jdk-18-1804:
+  jdk-19-1804:
     interface: content
     read: [$SNAP/jdk]
-  jdk-19-1804:
+  jdk-20-1804:
     interface: content
     read: [$SNAP/jdk]
 
@@ -105,12 +105,12 @@ parts:
 
   jdk:
     plugin: autotools
-    source: https://github.com/openjdk/jdk19u.git
+    source: https://github.com/openjdk/jdk20u.git
     source-type: git
     source-tag: jdk-$SNAPCRAFT_PROJECT_VERSION
     source-depth: 1
     build-snaps:
-    - bootjdk/latest/stable
+    - bootjdk/latest/candidate
     build-packages:
     - curl
     - libasound2-dev
@@ -126,9 +126,9 @@ parts:
     - unzip
     - zip
     override-pull: |
-      release=19
-      giturl=https://github.com/openjdk/jdk19u.git
-      tagurl=https://github.com/openjdk/jdk19u/tags.atom
+      release=20
+      giturl=https://github.com/openjdk/jdk20u.git
+      tagurl=https://github.com/openjdk/jdk20u/tags.atom
 
       # Gets the version from the latest release tag on GitHub
       #   $1 = feature release number (formerly "major" version)
