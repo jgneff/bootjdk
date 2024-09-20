@@ -74,7 +74,6 @@ apps:
     - x11
     environment:
       LC_ALL: C.UTF-8
-      XAUTHORITY: $SNAP_REAL_HOME/.Xauthority
   javac:
     command: jdk/bin/javac
     environment:
