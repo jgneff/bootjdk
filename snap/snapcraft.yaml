@@ -46,10 +46,10 @@ architectures:
 - build-on: s390x
 
 slots:
-  jdk-20-2004:
+  jdk-21-2004:
     interface: content
     read: [$SNAP/jdk]
-  jdk-21-2004:
+  jdk-22-2004:
     interface: content
     read: [$SNAP/jdk]
 
@@ -110,6 +110,8 @@ parts:
 
   jdk:
     plugin: autotools
+    build-snaps:
+    - bootjdk/latest/stable
     build-packages:
     - curl
     - g++-10
@@ -124,13 +126,12 @@ parts:
     - libxrender-dev
     - libxt-dev
     - libxtst-dev
-    - openjdk-21-jdk-headless
     - unzip
     - zip
     override-pull: |
-      release=21
-      gitrepo=https://github.com/openjdk/jdk21u.git
-      tagfeed=https://github.com/openjdk/jdk21u/tags.atom
+      release=22
+      gitrepo=https://github.com/openjdk/jdk22u.git
+      tagfeed=https://github.com/openjdk/jdk22u/tags.atom
 
       # Gets the version from the latest release tag on GitHub
       #   $1 = feature release number (formerly "major" version)
@@ -155,7 +156,7 @@ parts:
       setversion "$version"
       git clone --branch "jdk-$version" --depth 1 $gitrepo "$SNAPCRAFT_PART_SRC"
     build-environment:
-    - JAVA_HOME: /usr/lib/jvm/java-21-openjdk-$SNAPCRAFT_TARGET_ARCH
+    - JAVA_HOME: /snap/bootjdk/current/jdk
     override-build: |
       # Upgrades to version 10 of gcc and g++
       update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 \
