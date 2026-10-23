@@ -46,10 +46,10 @@ architectures:
 - build-on: [s390x]
 
 slots:
-  jdk-26-2004:
+  jdk-27-2004:
     interface: content
     read: [$SNAP/jdk]
-  jdk-27-2004:
+  jdk-28-2004:
     interface: content
     read: [$SNAP/jdk]
 
@@ -111,7 +111,7 @@ parts:
   jdk:
     plugin: autotools
     build-snaps:
-    - bootjdk/latest/candidate
+    - bootjdk/latest/beta
     build-packages:
     - curl
     - g++-10
@@ -131,9 +131,9 @@ parts:
     - unzip
     - zip
     override-pull: |
-      release=27
-      gitrepo=https://github.com/openjdk/jdk27u.git
-      tagfeed=https://github.com/openjdk/jdk27u/tags.atom
+      release=28
+      gitrepo=https://github.com/openjdk/jdk28u.git
+      tagfeed=https://github.com/openjdk/jdk28u/tags.atom
 
       # Gets the version from the latest release tag on GitHub
       #   $1 = feature release number (formerly "major" version)
