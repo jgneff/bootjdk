@@ -1,5 +1,5 @@
 # snapcraft.yaml - builds a Snap package of BootJDK
-# Copyright (C) 2021-2025 John Neffenger
+# Copyright (C) 2021-2026 John Neffenger
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -38,18 +38,18 @@ grade: stable
 confinement: strict
 
 architectures:
-- build-on: amd64
-- build-on: arm64
-- build-on: armhf
-- build-on: ppc64el
-- build-on: riscv64
-- build-on: s390x
+- build-on: [amd64]
+- build-on: [arm64]
+- build-on: [armhf]
+- build-on: [ppc64el]
+- build-on: [riscv64]
+- build-on: [s390x]
 
 slots:
-  jdk-22-2004:
+  jdk-25-2004:
     interface: content
     read: [$SNAP/jdk]
-  jdk-23-2004:
+  jdk-26-2004:
     interface: content
     read: [$SNAP/jdk]
 
@@ -111,11 +111,12 @@ parts:
   jdk:
     plugin: autotools
     build-snaps:
-    - bootjdk/latest/candidate
+    - bootjdk/latest/stable
     build-packages:
     - curl
     - g++-10
     - git
+    - graphviz
     - libasound2-dev
     - libcups2-dev
     - libfontconfig1-dev
@@ -126,12 +127,13 @@ parts:
     - libxrender-dev
     - libxt-dev
     - libxtst-dev
+    - pandoc
     - unzip
     - zip
     override-pull: |
-      release=23
-      gitrepo=https://github.com/openjdk/jdk23u.git
-      tagfeed=https://github.com/openjdk/jdk23u/tags.atom
+      release=26
+      gitrepo=https://github.com/openjdk/jdk26u.git
+      tagfeed=https://github.com/openjdk/jdk26u/tags.atom
 
       # Gets the version from the latest release tag on GitHub
       #   $1 = feature release number (formerly "major" version)
@@ -178,6 +180,7 @@ parts:
           --with-version-pre=no \
           --with-version-opt=snap \
           --with-version-build="${SNAPCRAFT_PROJECT_VERSION#*+}" \
+          --with-boot-jdk-jvmargs="-Xmx2047M" \
           --with-extra-cflags="$CFLAGS" \
           --with-extra-cxxflags="$CXXFLAGS" \
           --with-extra-ldflags="$LDFLAGS" \
