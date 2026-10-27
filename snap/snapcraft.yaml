@@ -111,7 +111,7 @@ parts:
   jdk:
     plugin: autotools
     build-snaps:
-    - bootjdk/latest/edge
+    - bootjdk/latest/stable
     build-packages:
     - curl
     - g++-10
