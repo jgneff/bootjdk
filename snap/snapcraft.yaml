@@ -171,8 +171,16 @@ parts:
       SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
       export SOURCE_DATE_EPOCH
 
+      # Disable warnings as errors for armhf native code
+      if [ "$SNAPCRAFT_ARCH_BUILD_FOR" = "armhf" ]; then
+          export WARNINGS_AS_ERRORS="no"
+      else
+          export WARNINGS_AS_ERRORS="yes"
+      fi
+
       # Builds the JDK
       bash configure \
+          --enable-warnings-as-errors="$WARNINGS_AS_ERRORS" \
           --enable-javac-server=no \
           --with-vendor-name="Snap Build" \
           --with-vendor-url="https://snapcraft.io/bootjdk" \
